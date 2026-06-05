@@ -1,6 +1,7 @@
 const express = require("express");
 const axios = require("axios");
 const OpenAI = require("openai");
+const path = require("path");
 
 const app = express();
 app.use(express.json());
@@ -29,6 +30,10 @@ Airport transfer: Airport transfers can be arranged upon request.
 
 app.get("/", (req, res) => {
   res.status(200).send("HotelAI WhatsApp Bot is running.");
+});
+
+app.get("/privacy", (req, res) => {
+  res.sendFile(path.join(__dirname, "privacy.html"));
 });
 
 app.get("/webhook", (req, res) => {
@@ -78,13 +83,13 @@ app.post("/webhook", async (req, res) => {
         {
           role: "system",
           content:
-            "You are a polite AI hotel receptionist. Answer only using the hotel FAQ. Keep answers short, friendly and professional. If the answer is not found in the FAQ, say you don't have that information and suggest contacting reception."
+            "You are a polite AI hotel receptionist. Answer only using the hotel FAQ. Keep answers short, friendly and professional. If the answer is not found in the FAQ, say you don't have that information and suggest contacting reception.",
         },
         {
           role: "user",
-          content: `Guest question: ${text}\n\nFAQ:\n${HOTEL_FAQ}`
-        }
-      ]
+          content: `Guest question: ${text}\n\nFAQ:\n${HOTEL_FAQ}`,
+        },
+      ],
     });
 
     const reply = completion.choices[0].message.content;
@@ -97,14 +102,14 @@ app.post("/webhook", async (req, res) => {
         messaging_product: "whatsapp",
         to: from,
         text: {
-          body: reply
-        }
+          body: reply,
+        },
       },
       {
         headers: {
           Authorization: `Bearer ${WHATSAPP_TOKEN}`,
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
 
