@@ -9,6 +9,7 @@ app.use(express.json());
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const PHONE_NUMBER_ID = process.env.PHONE_NUMBER_ID;
+console.log("PHONE_NUMBER_ID =", PHONE_NUMBER_ID);
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
